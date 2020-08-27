@@ -52,12 +52,26 @@ if ($export_pdf == '1') {
 }
 $string .= "\n\t    </div>
         </div>
+        <div class=\"table-responsive\">
         <table class=\"table table-bordered table-striped\" id=\"mytable\">
             <thead>
                 <tr>
                     <th width=\"80px\">No</th>";
 foreach ($non_pk as $row) {
-    $string .= "\n\t\t    <th>" . label($row['column_name']) . "</th>";
+    //$string .= "\n\t\t    <th>" . label($row['column_name']) . "</th>"; //Original Haviacode
+    //Edit by  Meedun 
+    if(isset($_POST['field_'.$row['column_name']]) && isset($_POST['generate']))  //meedun code selected filed
+    { 
+        if($_POST['field_'.$row['column_name']]==1){
+            $string .= "\n\t\t    <th>" . label($row['column_name']) . "</th>";
+        }
+        
+    }
+     if(isset($_POST['generateall']))  //meedun code selected filed
+     {
+            $string .= "\n\t\t    <th>" . label($row['column_name']) . "</th>";
+     }
+    //Edit by  Meedun 
 }
 $string .= "\n\t\t    <th width=\"200px\">Action</th>
                 </tr>
@@ -65,12 +79,26 @@ $string .= "\n\t\t    <th width=\"200px\">Action</th>
 
 $column_non_pk = array();
 foreach ($non_pk as $row) {
-    $column_non_pk[] .= "{\"data\": \"".$row['column_name']."\"}";
+    //$column_non_pk[] .= "{\"data\": \"".$row['column_name']."\"}"; ////Original Haviacode
+    //Edit by  Meedun 
+    if(isset($_POST['field_'.$row['column_name']]) && isset($_POST['generate']))  //meedun code selected filed
+    { 
+        if($_POST['field_'.$row['column_name']]==1){
+            $column_non_pk[] .= "{\"data\": \"".$row['column_name']."\"}";
+        }
+        
+    }
+     if(isset($_POST['generateall']))  //meedun code selected filed
+     {
+            $column_non_pk[] .= "{\"data\": \"".$row['column_name']."\"}";
+     }
+    //Edit by  Meedun 
 }
 $col_non_pk = implode(',', $column_non_pk);
 
 $string .= "\n\t    
         </table>
+        </div>
         <script src=\"<?php echo base_url('assets/js/jquery-1.11.2.min.js') ?>\"></script>
         <script src=\"<?php echo base_url('assets/datatables/jquery.dataTables.js') ?>\"></script>
         <script src=\"<?php echo base_url('assets/datatables/dataTables.bootstrap.js') ?>\"></script>

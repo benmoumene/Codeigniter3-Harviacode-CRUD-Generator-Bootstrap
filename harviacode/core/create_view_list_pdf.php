@@ -23,7 +23,14 @@ $string = "<!doctype html>
             <tr>
                 <th>No</th>";
 foreach ($non_pk as $row) {
-    $string .= "\n\t\t<th>" . label($row['column_name']) . "</th>";
+    if(isset($_POST['field_'.$row['column_name']]) && isset($_POST['generate']))  //meedun code selected filed
+    { 
+        $string .= "\n\t\t<th>" . label($row['column_name']) . "</th>";
+    }
+    if(isset($_POST['generateall']))  //meedun code selected filed
+    {
+        $string .= "\n\t\t<th>" . label($row['column_name']) . "</th>";
+    }
 }
 $string .= "\n\t\t
             </tr>";
@@ -36,7 +43,14 @@ $string .= "<?php
 $string .= "\n\t\t      <td><?php echo ++\$start ?></td>";
 
 foreach ($non_pk as $row) {
-    $string .= "\n\t\t      <td><?php echo $" . $c_url ."->". $row['column_name'] . " ?></td>";
+    if(isset($_POST['field_'.$row['column_name']]) && isset($_POST['generate']))  //meedun code selected filed
+    { 
+        $string .= "\n\t\t      <td><?php echo $" . $c_url ."->". $row['column_name'] . " ?></td>";
+    }
+    if(isset($_POST['generateall']))  //meedun code selected filed
+    {
+        $string .= "\n\t\t      <td><?php echo $" . $c_url ."->". $row['column_name'] . " ?></td>";
+    }
 }
 
 $string .=  "\t

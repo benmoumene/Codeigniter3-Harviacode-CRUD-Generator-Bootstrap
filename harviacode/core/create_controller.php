@@ -73,7 +73,14 @@ $string .= "\n\n    public function read(\$id)
         if (\$row) {
             \$data = array(";
 foreach ($all as $row) {
-    $string .= "\n\t\t'" . $row['column_name'] . "' => \$row->" . $row['column_name'] . ",";
+    if(isset($_POST['field_'.$row['column_name']]) && isset($_POST['generate']))  //meedun code selected filed
+    { 
+        $string .= "\n\t\t'" . $row['column_name'] . "' => \$row->" . $row['column_name'] . ",";
+    }
+    if(isset($_POST['generateall']))  //meedun code
+    {
+        $string .= "\n\t\t'" . $row['column_name'] . "' => \$row->" . $row['column_name'] . ",";
+    }
 }
 $string .= "\n\t    );
             \$this->load->view('$c_url/$v_read', \$data);
@@ -89,7 +96,14 @@ $string .= "\n\t    );
             'button' => 'Create',
             'action' => site_url('$c_url/create_action'),";
 foreach ($all as $row) {
-    $string .= "\n\t    '" . $row['column_name'] . "' => set_value('" . $row['column_name'] . "'),";
+    if(isset($_POST['field_'.$row['column_name']]) && isset($_POST['generate']))  //meedun code selected filed
+    { 
+        $string .= "\n\t    '" . $row['column_name'] . "' => set_value('" . $row['column_name'] . "'),";
+    }
+    if(isset($_POST['generateall']))  //meedun code
+    {
+        $string .= "\n\t    '" . $row['column_name'] . "' => set_value('" . $row['column_name'] . "'),";
+    }
 }
 $string .= "\n\t);
         \$this->load->view('$c_url/$v_form', \$data);
@@ -104,7 +118,14 @@ $string .= "\n\t);
         } else {
             \$data = array(";
 foreach ($non_pk as $row) {
-    $string .= "\n\t\t'" . $row['column_name'] . "' => \$this->input->post('" . $row['column_name'] . "',TRUE),";
+    if(isset($_POST['field_'.$row['column_name']]) && isset($_POST['generate']))  //meedun code selected filed
+    { 
+        $string .= "\n\t\t'" . $row['column_name'] . "' => \$this->input->post('" . $row['column_name'] . "',TRUE),";
+    }
+    if(isset($_POST['generateall']))  //meedun code
+    {
+        $string .= "\n\t\t'" . $row['column_name'] . "' => \$this->input->post('" . $row['column_name'] . "',TRUE),";
+    }
 }
 $string .= "\n\t    );
 
@@ -123,7 +144,14 @@ $string .= "\n\t    );
                 'button' => 'Update',
                 'action' => site_url('$c_url/update_action'),";
 foreach ($all as $row) {
-    $string .= "\n\t\t'" . $row['column_name'] . "' => set_value('" . $row['column_name'] . "', \$row->". $row['column_name']."),";
+    if(isset($_POST['field_'.$row['column_name']]) && isset($_POST['generate']))  //meedun code selected filed
+    { 
+        $string .= "\n\t\t'" . $row['column_name'] . "' => set_value('" . $row['column_name'] . "', \$row->". $row['column_name']."),";
+    }
+    if(isset($_POST['generateall']))  //meedun code
+    {
+        $string .= "\n\t\t'" . $row['column_name'] . "' => set_value('" . $row['column_name'] . "', \$row->". $row['column_name']."),";
+    }
 }
 $string .= "\n\t    );
             \$this->load->view('$c_url/$v_form', \$data);
@@ -142,7 +170,14 @@ $string .= "\n\t    );
         } else {
             \$data = array(";
 foreach ($non_pk as $row) {
-    $string .= "\n\t\t'" . $row['column_name'] . "' => \$this->input->post('" . $row['column_name'] . "',TRUE),";
+    if(isset($_POST['field_'.$row['column_name']]) && isset($_POST['generate']))  //meedun code selected filed
+    {  
+        $string .= "\n\t\t'" . $row['column_name'] . "' => \$this->input->post('" . $row['column_name'] . "',TRUE),";
+    }
+    if(isset($_POST['generateall']))  //meedun code
+    {
+        $string .= "\n\t\t'" . $row['column_name'] . "' => \$this->input->post('" . $row['column_name'] . "',TRUE),";
+    }
 }    
 $string .= "\n\t    );
 
@@ -169,8 +204,16 @@ $string .= "\n\t    );
     public function _rules() 
     {";
 foreach ($non_pk as $row) {
-    $int = $row3['data_type'] == 'int' || $row['data_type'] == 'double' || $row['data_type'] == 'decimal' ? '|numeric' : '';
-    $string .= "\n\t\$this->form_validation->set_rules('".$row['column_name']."', '".  strtolower(label($row['column_name']))."', 'trim|required$int');";
+    if(isset($_POST['field_'.$row['column_name']]) && isset($_POST['generate']))  //meedun code selected filed
+    { 
+        $int = $row3['data_type'] == 'int' || $row['data_type'] == 'double' || $row['data_type'] == 'decimal' ? '|numeric' : '';
+        $string .= "\n\t\$this->form_validation->set_rules('".$row['column_name']."', '".  strtolower(label($row['column_name']))."', 'trim|required$int');";
+    } 
+    if(isset($_POST['generateall']))  //meedun code
+    {
+        $int = $row3['data_type'] == 'int' || $row['data_type'] == 'double' || $row['data_type'] == 'decimal' ? '|numeric' : '';
+        $string .= "\n\t\$this->form_validation->set_rules('".$row['column_name']."', '".  strtolower(label($row['column_name']))."', 'trim|required$int');";
+    }
 }    
 $string .= "\n\n\t\$this->form_validation->set_rules('$pk', '$pk', 'trim');";
 $string .= "\n\t\$this->form_validation->set_error_delimiters('<span class=\"text-danger\">', '</span>');
@@ -200,8 +243,16 @@ if ($export_excel == '1') {
         \$kolomhead = 0;
         xlsWriteLabel(\$tablehead, \$kolomhead++, \"No\");";
 foreach ($non_pk as $row) {
+    if(isset($_POST['field_'.$row['column_name']]) && isset($_POST['generate']))  //meedun code selected filed
+    { 
         $column_name = label($row['column_name']);
         $string .= "\n\txlsWriteLabel(\$tablehead, \$kolomhead++, \"$column_name\");";
+    }
+    if(isset($_POST['generateall']))  //meedun code
+    {
+        $column_name = label($row['column_name']);
+        $string .= "\n\txlsWriteLabel(\$tablehead, \$kolomhead++, \"$column_name\");";
+    }
 }
 $string .= "\n\n\tforeach (\$this->" . $m . "->get_all() as \$data) {
             \$kolombody = 0;
@@ -209,9 +260,18 @@ $string .= "\n\n\tforeach (\$this->" . $m . "->get_all() as \$data) {
             //ubah xlsWriteLabel menjadi xlsWriteNumber untuk kolom numeric
             xlsWriteNumber(\$tablebody, \$kolombody++, \$nourut);";
 foreach ($non_pk as $row) {
+    if(isset($_POST['field_'.$row['column_name']]) && isset($_POST['generate']))  //meedun code selected filed
+    { 
         $column_name = $row['column_name'];
         $xlsWrite = $row['data_type'] == 'int' || $row['data_type'] == 'double' || $row['data_type'] == 'decimal' ? 'xlsWriteNumber' : 'xlsWriteLabel';
         $string .= "\n\t    " . $xlsWrite . "(\$tablebody, \$kolombody++, \$data->$column_name);";
+    }
+    if(isset($_POST['generateall']))  //meedun code
+    {
+        $column_name = $row['column_name'];
+        $xlsWrite = $row['data_type'] == 'int' || $row['data_type'] == 'double' || $row['data_type'] == 'decimal' ? 'xlsWriteNumber' : 'xlsWriteLabel';
+        $string .= "\n\t    " . $xlsWrite . "(\$tablebody, \$kolombody++, \$data->$column_name);";
+    }
 }
 $string .= "\n\n\t    \$tablebody++;
             \$nourut++;

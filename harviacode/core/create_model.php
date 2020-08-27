@@ -21,7 +21,18 @@ if ($jenis_tabel <> 'reguler_table') {
     
 $column_all = array();
 foreach ($all as $row) {
-    $column_all[] = $row['column_name'];
+    if(isset($_POST['field_'.$row['column_name']]) && isset($_POST['generate']))  //meedun code selected filed
+    {  
+        if($_POST['field_'.$row['column_name']]==1){
+            $column_all[] = $row['column_name'];
+        }  
+    }
+    if(isset($_POST['generateall']))  //meedun code
+    {
+        if($_POST['field_'.$row['column_name']]==1){
+            $column_all[] = $row['column_name'];
+        } 
+    }
 }
 $columnall = implode(',', $column_all);
     
@@ -55,7 +66,14 @@ $string .="\n\n    // get all
         \$this->db->like('$pk', \$q);";
 
 foreach ($non_pk as $row) {
-    $string .= "\n\t\$this->db->or_like('" . $row['column_name'] ."', \$q);";
+    if(isset($_POST['field_'.$row['column_name']]) && isset($_POST['generate']))  //meedun code selected filed
+    { 
+        $string .= "\n\t\$this->db->or_like('" . $row['column_name'] ."', \$q);";
+    }
+    if(isset($_POST['generateall']))  //meedun code
+    {
+        $string .= "\n\t\$this->db->or_like('" . $row['column_name'] ."', \$q);";
+    }
 }    
 
 $string .= "\n\t\$this->db->from(\$this->table);
@@ -68,7 +86,14 @@ $string .= "\n\t\$this->db->from(\$this->table);
         \$this->db->like('$pk', \$q);";
 
 foreach ($non_pk as $row) {
-    $string .= "\n\t\$this->db->or_like('" . $row['column_name'] ."', \$q);";
+    if(isset($_POST['field_'.$row['column_name']]) && isset($_POST['generate']))  //meedun code selected filed
+    { 
+        $string .= "\n\t\$this->db->or_like('" . $row['column_name'] ."', \$q);";
+    }
+    if(isset($_POST['generateall']))  //meedun code
+    {
+        $string .= "\n\t\$this->db->or_like('" . $row['column_name'] ."', \$q);";
+    }
 }    
 
 $string .= "\n\t\$this->db->limit(\$limit, \$start);

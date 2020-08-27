@@ -1,5 +1,5 @@
-# Codeigniter CRUD Generator 1.4 by [harviacode.com](http://harviacode.com)#
-
+# Codeigniter CRUD Generator 1.4.1 (modified by Meedun) #
+## origin developer [harviacode.com](http://harviacode.com) ##
 ## About : ##
 
 Codeigniter CRUD Generator is a simple tool to auto generate model, controller and view from your table. This tool will boost your writing code. This CRUD generator will make a complete CRUD operation, pagination, search, form*, form validation, export to excel and export to word. This CRUD Generator using bootstrap 3 style. You still need to modify the result code for more customization.
@@ -35,6 +35,9 @@ watch video on https://youtu.be/OHZ7hhRLUZM
 Buy me a cup of coffee.. paypal : hariprasetyo0212@gmail.com
 
 ## Update ##
+V.1.4.1 (meedun) - 27 August 2020
+* Add the displayed database field selector
+* * This feature only affects the Generator button, ignored in Generate All button
 V.1.4 - 26 November 2016
 
 * Change to serverside datatables using ignited datatables

@@ -1,16 +1,3 @@
-.DS_Store
-### Harviacode ###
-application/*
-system/*
-index.php
-
-application/cache/*
-!application/cache/index.html
-!application/cache/.htaccess
-
-application/logs/*
-!application/logs/index.html
-!application/logs/.htaccess
 ### CodeIgniter ###
 */config/development
 */logs/log-*.php
@@ -30,17 +17,6 @@ application/logs/*
 !application/logs/.htaccess
 /vendor/
 
-# IDE Files
-#-------------------------
-/nbproject/
-.idea/*
-
-## Sublime Text cache files
-*.tmlanguage.cache
-*.tmPreferences.cache
-*.stTheme.cache
-*.sublime-workspace
-*.sublime-project
 ### CodeIgniter Patch ###
 
 ### VisualStudioCode ###
