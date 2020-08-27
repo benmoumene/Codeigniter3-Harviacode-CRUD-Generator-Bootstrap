@@ -1,15 +1,14 @@
 .DS_Store
-### Harviacode ###
-application/*
-system/*
-index.php
-
 ## harviacode ignore output ##
 harviacode/output/config/*
 harviacode/output/controllers/*
 harviacode/output/helpers/*
 harviacode/output/models/*
 harviacode/output/views/*
+!assets/bootstrap/*
+!assets/datatables/*
+!assets/js/*
+
 
 application/cache/*
 !application/cache/index.html
@@ -20,6 +19,11 @@ application/logs/*
 !application/logs/.htaccess
 
 ### CodeIgniter ###
+application/
+application/config/*
+system/*
+/index.php
+
 */config/development
 */logs/log-*.php
 !*/logs/index.html
