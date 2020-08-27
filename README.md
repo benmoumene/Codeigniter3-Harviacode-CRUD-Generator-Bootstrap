@@ -35,7 +35,7 @@ watch video on https://youtu.be/OHZ7hhRLUZM
 Buy me a cup of coffee.. paypal : hariprasetyo0212@gmail.com
 
 ## Update ##
-V.1.4.1 (meedun) - 27 August 2020  (Test on CodeIgniter Version 3.1.11)
+V.1.4.1 ([meedun](https://blog.simeedun.com)) - 27 August 2020  (Test on [CodeIgniter Version 3.1.11](https://github.com/bcit-ci/CodeIgniter/releases/tag/3.1.11))
 * Add the displayed database field selector
 * * This feature only affects the Generator button, ignored in Generate All button
 V.1.4 - 26 November 2016
