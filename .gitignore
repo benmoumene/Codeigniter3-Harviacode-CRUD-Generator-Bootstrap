@@ -4,6 +4,13 @@ application/*
 system/*
 index.php
 
+## harviacode ignore output ##
+harviacode/output/config/*
+harviacode/output/controllers/*
+harviacode/output/helpers/*
+harviacode/output/models/*
+harviacode/output/views/*
+
 application/cache/*
 !application/cache/index.html
 !application/cache/.htaccess
@@ -11,6 +18,7 @@ application/cache/*
 application/logs/*
 !application/logs/index.html
 !application/logs/.htaccess
+
 ### CodeIgniter ###
 */config/development
 */logs/log-*.php
