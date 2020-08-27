@@ -9,18 +9,38 @@ class User extends CI_Controller
     {
         parent::__construct();
         $this->load->model('User_model');
-        $this->load->library('form_validation');        
-	$this->load->library('datatables');
+        $this->load->library('form_validation');
     }
 
     public function index()
     {
-        $this->load->view('user/user_list');
-    } 
-    
-    public function json() {
-        header('Content-Type: application/json');
-        echo $this->User_model->json();
+        $q = urldecode($this->input->get('q', TRUE));
+        $start = intval($this->input->get('start'));
+        
+        if ($q <> '') {
+            $config['base_url'] = base_url() . 'user/index.html?q=' . urlencode($q);
+            $config['first_url'] = base_url() . 'user/index.html?q=' . urlencode($q);
+        } else {
+            $config['base_url'] = base_url() . 'user/index.html';
+            $config['first_url'] = base_url() . 'user/index.html';
+        }
+
+        $config['per_page'] = 10;
+        $config['page_query_string'] = TRUE;
+        $config['total_rows'] = $this->User_model->total_rows($q);
+        $user = $this->User_model->get_limit_data($config['per_page'], $start, $q);
+
+        $this->load->library('pagination');
+        $this->pagination->initialize($config);
+
+        $data = array(
+            'user_data' => $user,
+            'q' => $q,
+            'pagination' => $this->pagination->create_links(),
+            'total_rows' => $config['total_rows'],
+            'start' => $start,
+        );
+        $this->load->view('user/user_list', $data);
     }
 
     public function read($id) 
@@ -28,12 +48,8 @@ class User extends CI_Controller
         $row = $this->User_model->get_by_id($id);
         if ($row) {
             $data = array(
-		'user_id' => $row->user_id,
-		'user_nama' => $row->user_nama,
-		'user_level' => $row->user_level,
-		'user_inisial' => $row->user_inisial,
-		'user_kunci' => $row->user_kunci,
-		'user_aktif' => $row->user_aktif,
+		'username' => $row->username,
+		'token' => $row->token,
 	    );
             $this->load->view('user/user_read', $data);
         } else {
@@ -47,12 +63,8 @@ class User extends CI_Controller
         $data = array(
             'button' => 'Create',
             'action' => site_url('user/create_action'),
-	    'user_id' => set_value('user_id'),
-	    'user_nama' => set_value('user_nama'),
-	    'user_level' => set_value('user_level'),
-	    'user_inisial' => set_value('user_inisial'),
-	    'user_kunci' => set_value('user_kunci'),
-	    'user_aktif' => set_value('user_aktif'),
+	    'username' => set_value('username'),
+	    'token' => set_value('token'),
 	);
         $this->load->view('user/user_form', $data);
     }
@@ -65,11 +77,8 @@ class User extends CI_Controller
             $this->create();
         } else {
             $data = array(
-		'user_nama' => $this->input->post('user_nama',TRUE),
-		'user_level' => $this->input->post('user_level',TRUE),
-		'user_inisial' => $this->input->post('user_inisial',TRUE),
-		'user_kunci' => md5($this->input->post('user_kunci',TRUE)),
-		'user_aktif' => $this->input->post('user_aktif',TRUE),
+		'username' => $this->input->post('username',TRUE),
+		'token' => $this->input->post('token',TRUE),
 	    );
 
             $this->User_model->insert($data);
@@ -86,12 +95,8 @@ class User extends CI_Controller
             $data = array(
                 'button' => 'Update',
                 'action' => site_url('user/update_action'),
-		'user_id' => set_value('user_id', $row->user_id),
-		'user_nama' => set_value('user_nama', $row->user_nama),
-		'user_level' => set_value('user_level', $row->user_level),
-		'user_inisial' => set_value('user_inisial', $row->user_inisial),
-		'user_kunci' => set_value('user_kunci', $row->user_kunci),
-		'user_aktif' => set_value('user_aktif', $row->user_aktif),
+		'username' => set_value('username', $row->username),
+		'token' => set_value('token', $row->token),
 	    );
             $this->load->view('user/user_form', $data);
         } else {
@@ -105,17 +110,14 @@ class User extends CI_Controller
         $this->_rules();
 
         if ($this->form_validation->run() == FALSE) {
-            $this->update($this->input->post('user_id', TRUE));
+            $this->update($this->input->post('id', TRUE));
         } else {
             $data = array(
-		'user_nama' => $this->input->post('user_nama',TRUE),
-		'user_level' => $this->input->post('user_level',TRUE),
-		'user_inisial' => $this->input->post('user_inisial',TRUE),
-		'user_kunci' => md5($this->input->post('user_kunci',TRUE)),
-		'user_aktif' => $this->input->post('user_aktif',TRUE),
+		'username' => $this->input->post('username',TRUE),
+		'token' => $this->input->post('token',TRUE),
 	    );
 
-            $this->User_model->update($this->input->post('user_id', TRUE), $data);
+            $this->User_model->update($this->input->post('id', TRUE), $data);
             $this->session->set_flashdata('message', 'Update Record Success');
             redirect(site_url('user'));
         }
@@ -137,74 +139,11 @@ class User extends CI_Controller
 
     public function _rules() 
     {
-	$this->form_validation->set_rules('user_nama', 'user nama', 'trim|required');
-	$this->form_validation->set_rules('user_level', 'user level', 'trim|required');
-	$this->form_validation->set_rules('user_inisial', 'user inisial', 'trim|required');
-	$this->form_validation->set_rules('user_kunci', 'user kunci', 'trim|required');
-	$this->form_validation->set_rules('user_aktif', 'user aktif', 'trim|required');
+	$this->form_validation->set_rules('username', 'username', 'trim|required');
+	$this->form_validation->set_rules('token', 'token', 'trim|required');
 
-	$this->form_validation->set_rules('user_id', 'user_id', 'trim');
+	$this->form_validation->set_rules('id', 'id', 'trim');
 	$this->form_validation->set_error_delimiters('<span class="text-danger">', '</span>');
-    }
-
-    public function excel()
-    {
-        $this->load->helper('exportexcel');
-        $namaFile = "user.xls";
-        $judul = "user";
-        $tablehead = 0;
-        $tablebody = 1;
-        $nourut = 1;
-        //penulisan header
-        header("Pragma: public");
-        header("Expires: 0");
-        header("Cache-Control: must-revalidate, post-check=0,pre-check=0");
-        header("Content-Type: application/force-download");
-        header("Content-Type: application/octet-stream");
-        header("Content-Type: application/download");
-        header("Content-Disposition: attachment;filename=" . $namaFile . "");
-        header("Content-Transfer-Encoding: binary ");
-
-        xlsBOF();
-
-        $kolomhead = 0;
-        xlsWriteLabel($tablehead, $kolomhead++, "No");
-	xlsWriteLabel($tablehead, $kolomhead++, "User Nama");
-	xlsWriteLabel($tablehead, $kolomhead++, "User Level");
-	xlsWriteLabel($tablehead, $kolomhead++, "User Inisial");
-	xlsWriteLabel($tablehead, $kolomhead++, "User Kunci");
-	xlsWriteLabel($tablehead, $kolomhead++, "User Aktif");
-
-	foreach ($this->User_model->get_all() as $data) {
-            $kolombody = 0;
-
-            //ubah xlsWriteLabel menjadi xlsWriteNumber untuk kolom numeric
-            xlsWriteNumber($tablebody, $kolombody++, $nourut);
-	    xlsWriteLabel($tablebody, $kolombody++, $data->user_nama);
-	    xlsWriteNumber($tablebody, $kolombody++, $data->user_level);
-	    xlsWriteLabel($tablebody, $kolombody++, $data->user_inisial);
-	    xlsWriteLabel($tablebody, $kolombody++, $data->user_kunci);
-	    xlsWriteLabel($tablebody, $kolombody++, $data->user_aktif);
-
-	    $tablebody++;
-            $nourut++;
-        }
-
-        xlsEOF();
-        exit();
-    }
-
-    public function word()
-    {
-        header("Content-type: application/vnd.ms-word");
-        header("Content-Disposition: attachment;Filename=user.doc");
-
-        $data = array(
-            'user_data' => $this->User_model->get_all(),
-            'start' => 0
-        );
-        
-        $this->load->view('user/user_doc',$data);
     }
 
 }
@@ -212,5 +151,5 @@ class User extends CI_Controller
 /* End of file User.php */
 /* Location: ./application/controllers/User.php */
 /* Please DO NOT modify this information : */
-/* Generated by Harviacode Codeigniter CRUD Generator 2018-04-15 04:53:42 */
+/* Generated by Harviacode Codeigniter CRUD Generator 2020-08-27 21:04:23 */
 /* http://harviacode.com */

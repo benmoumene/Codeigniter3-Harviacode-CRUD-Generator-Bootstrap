@@ -1,3 +1,4 @@
+
 .DS_Store
 ## harviacode ignore output ##
 harviacode/output/config/*
@@ -10,36 +11,15 @@ harviacode/output/views/*
 !assets/js/*
 
 
-application/cache/*
-!application/cache/index.html
-!application/cache/.htaccess
-
-application/logs/*
-!application/logs/index.html
-!application/logs/.htaccess
-
-### CodeIgniter ###
-application/
-application/config/*
-system/*
-/index.php
-
-*/config/development
-*/logs/log-*.php
-!*/logs/index.html
-*/cache/*
-!*/cache/index.html
-!*/cache/.htaccess
+/application/
+/system/
+index.php
 
 user_guide_src/build/*
 user_guide_src/cilexer/build/*
 user_guide_src/cilexer/dist/*
 user_guide_src/cilexer/pycilexer.egg-info/*
 
-#codeigniter 3
-application/logs/*
-!application/logs/index.html
-!application/logs/.htaccess
 /vendor/
 
 # IDE Files
